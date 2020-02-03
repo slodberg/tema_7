@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="da">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <link rel="stylesheet" href="">
+</head>
+
+<body>
+    <p>Hvad er længeden?</p>
+    <input type="text" id="længde">
+    <p>Hvad er bredden?</p>
+    <input type="text" id="bredde">
+    <button>Udregn areal og se i consolen!</button>
+
+    <script>
+        document.querySelector("button").addEventListener("click", button_clicked);
+
+        function button_clicked() {
+            let længde = document.querySelector("#længde").value;
+            let bredde = document.querySelector("#bredde").value;
+
+            function areal(l, b) {
+                let a = (l * b);
+                if (a == 0) {
+                    return (`Husk at længde og bredde skal være tal. /n Prøv igen!`)
+                }
+            }
+
+            let resultat = areal(længde, bredde);
+            console.log(resultat);
+        }
+    </script>
+</body></html>
