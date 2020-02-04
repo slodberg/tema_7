@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="da">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <link rel="stylesheet" href="">
+</head>
+
+<body>
+
+
+    <script>
+        let time = new Date().getHours();
+        let hilsen;
+
+        if (time <= 5) {
+            hilsen = "Godnat";
+        } else if (time < 10) {
+            hilsen = "Goddag"
+        } else if (time < 18) {
+            hilsen = "Godaften";
+        } else(time < 22) {
+            hilsen = "Godnat";
+        }
+        console.log(hilsen);
+    </script>
+</body></html>

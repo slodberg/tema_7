@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+
+<body>
+    <section id="content">
+        <div>one</div>
+        <div>two</div>
+        <div>three</div>
+    </section>
+    <script>
+        document.querySelector("div")
+
+    </script>
+</body>
+
+</html>
