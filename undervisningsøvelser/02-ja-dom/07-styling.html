@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        .firkant {
+            height: 100px;
+            width: 100px;
+            line-height: 100px;
+            text-align: center;
+            background-color: green;
+        }
+
+        .cirkel {
+            height: 100px;
+            width: 100px;
+            line-height: 100px;
+            border-radius: 50%;
+            text-align: center;
+            background-color: red;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="firkant"></div>
+
+    <div class="cirkel"></div>
+
+    <script>
+        let firkantURL = `http://mabe-kea.dk/E19/pics/frog.png`;
+        let cirkelURL = `http://mabe-kea.dk/E19/pics/pig.png`;
+
+        document.addEventListener("DOMContentLoaded", start);
+
+        function start() {
+            console.log("start");
+            let firkant = document.querySelector(".firkant")
+            let cirkel = document.querySelector(".cirkel")
+
+            firkant.innerHTML = `<img src= ${firkantURL} alt= "Frø">`;
+            cirkel.innerHTML = `<img src= ${cirkelURL} alt= "Gris">`;
+
+            firkant.addEventListener("click", flyt);
+            cirkel.addEventListener("click", stop);
+
+            function flyt() {
+                let firkantStart = firkant.innerHTML;
+                firkant.innerHTML = cirkel.innerHTML;
+                cirkel.innerHTML = firkantStart;
+            }
+
+            function stop() {
+                firkant.removeEventListener("click", flyt);
+                firkant.style.transition = "1.5s";
+                firkant.style.backgroundColor = "red";
+                cirkel.style.transition = "1.5s";
+                cirkel.style.transform = "scale(0)";
+
+            }
+
+        }
+    </script>
+</body></html>
