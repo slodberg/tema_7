@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="da">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+</head>
+
+<body>
+    <section id="udskriv">
+        <h3></h3>
+        <p></p>
+        <p></p>
+        <img scr="" alt="">
+    </section>
+
+    <script>
+        let dyr = [{
+                "art": "Gris",
+                "type": "pattedyr",
+                "levested": "Grissefarm",
+                "billede": "http://mabe-kea.dk/E19/pics/pig.png"
+            },
+
+            {
+                "art": "Frø",
+                "type": "ikke pattedyr",
+                "levested": "sø",
+                "billede": "http://mabe-kea.dk/E19/pics/pig.png"
+            },
+
+            {
+                "art": "ræv",
+                "type": "pattedyr",
+                "levested": "skoven",
+                "billede": "http://mabe-kea.dk/E19/pics/pig.png"
+            },
+
+            {
+                "art": "sild",
+                "type": "ikke pattedyr",
+                "levested": "havet",
+                "billede": "http://mabe-kea.dk/E19/pics/pig.png"
+            },
+
+            {
+                "art": "krokodille",
+                "type": "ikke pattedyr",
+                "levested": "Flod",
+                "billede": "http://mabe-kea.dk/E19/pics/pig.png"
+            },
+        ];
+
+        const destination = document.querySelector("#udskriv");
+        const svin = `${dyr.art} ${dyr.type}`;
+        destination.querySelector("h3").textContent = dyr.art;
+        destination.querySelector("p").textContent = dyr.type;
+        destination.querySelector("p + p").textContent = dyr.levested;
+        destination.querySelector("img").src = dyr.billede;
+
+        console.log(dyr);
+
+        /*console.log(dyr[2].levested);*/
+    </script>
+</body></html>

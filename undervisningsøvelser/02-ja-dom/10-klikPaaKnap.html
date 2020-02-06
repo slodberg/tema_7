@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>A</title>
+    <style>
+        #box,
+        #bax {
+            width: 200px;
+            height: 200px;
+            background-color: wheat;
+            padding: 20px;
+            margin: 10px;
+        }
+
+        button {
+            font-size: 2rem;
+            margin: 10px;
+        }
+    </style>
+
+</head>
+
+<body>
+    <button id="klik">
+        klik
+    </button>
+    <button id="slet">
+        slet
+    </button>
+    <button id="html">
+        html
+    </button>
+    <button id="slet">
+        flyt
+    </button>
+    <div id="box"></div>
+    <div id="bax"></div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", start);
+
+        function start() {
+            console.log("start");
+            document.querySelector("#klik").addEventListener("click", klikKnap);
+
+            document.querySelector("#html").addEventListener("click", htmlKlik);
+
+            document.querySelector("#flyt").addEventListener("click", flytKlik);
+
+            function klikKnap() {
+                document.querySelector("#box").textContent = "Klik";
+                document.querySelector("#klik").removeEventListener("click", klikKnap);
+                document.querySelector("#slet").addEventListener("click", slet);
+            }
+
+            function slet() {
+                document.querySelector("#box").textContent = " ";
+            }
+
+            function htmlKlik() {
+                document.querySelector("#bax").innerHTML = `<h2>Dette er en h2</h2><p>Dette er et p-tag</p>`
+            }
+
+            function flytKlik() {
+                document.querySelector()
+            }
+        }
+    </script>
+</body></html>
