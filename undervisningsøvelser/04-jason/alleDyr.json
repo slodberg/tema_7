@@ -1,0 +1,35 @@
+[{
+        "art": "Gris",
+        "type": "pattedyr",
+        "levested": "Grissefarm",
+        "billede": "http://mabe-kea.dk/E19/pics/pig.png"
+            },
+
+    {
+        "art": "Frø",
+        "type": "ikke pattedyr",
+        "levested": "sø",
+        "billede": "http://mabe-kea.dk/E19/pics/pig.png"
+            },
+
+    {
+        "art": "ræv",
+        "type": "pattedyr",
+        "levested": "skoven",
+        "billede": "http://mabe-kea.dk/E19/pics/pig.png"
+            },
+
+    {
+        "art": "sild",
+        "type": "ikke pattedyr",
+        "levested": "havet",
+        "billede": "http://mabe-kea.dk/E19/pics/pig.png"
+            },
+
+    {
+        "art": "krokodille",
+        "type": "ikke pattedyr",
+        "levested": "Flod",
+        "billede": "http://mabe-kea.dk/E19/pics/pig.png"
+            }
+        ]

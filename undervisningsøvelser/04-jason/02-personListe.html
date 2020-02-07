@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="da">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <style>
+        section {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-gap: 5px;
+            max-width: 960px;
+            margin: 0 auto;
+        }
+
+        .item {
+            border: solid black;
+        }
+
+        img {
+            max-width: 200px;
+        }
+    </style>
+
+</head>
+
+<body>
+    <section id="udskriv"></section>
+
+    <template>
+        <div class="item">
+            <h2></h2>
+            <img scr="" alt="">
+            <p></p>
+            <p></p>
+        </div>
+    </template>
+
+    <script>
+        let personer;
+        const endpoint = "https://spreadsheets.google.com/feeds/list/1XWWbfWszD7f4jHqp51V_oT3pkHuR-ceEUw4YtrvK7F0/od6/public/values?alt=json";
+
+        document.addEventListener("DOMContentLoaded", start);
+
+        function start() {
+            hentJson();
+        }
+
+        async function hentJson() {
+            let jsonData = await fetch(endpoint);
+            personer = await jsonData.json();
+            visDyr();
+        }
+
+        function visDyr() {
+            const container = document.querySelector("#udskriv");
+            const arterTemplate = document.querySelector("template");
+            console.log("Personer", personer);
+            personer.feed.entry.forEach((person) => {
+                let klon = arterTemplate.cloneNode(true).content;
+                klon.querySelector("h2").textContent = person.gsx$navn.$t;
+                klon.querySelector("img").src = person.gsx$billede.$t;
+                klon.querySelector("p").textContent = person.gsx$religion.$t;
+                klon.querySelector("p + p").textContent = person.gsx$alder.$t;
+
+                container.appendChild(klon);
+
+            });
+
+
+        }
+    </script>
+</body></html>

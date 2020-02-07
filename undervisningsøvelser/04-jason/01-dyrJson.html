@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="da">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+</head>
+
+<body>
+    <section id="udskriv">
+        <h3></h3>
+        <p></p>
+        <p></p>
+        <img scr="" alt="">
+    </section>
+
+    <template>
+        <article class="arter">
+            <h3></h3>
+            <p></p>
+            <p></p>
+            <img scr="" alt="">
+        </article>
+    </template>
+
+    <script>
+        let dyr = [];
+
+        document.addEventListener("DOMContentLoaded", start);
+
+        function start() {
+            hentJson();
+        }
+
+        async function hentJson() {
+            const jsonData = await fetch("alleDyr.json");
+            dyr = await jsonData.json();
+            visDyr();
+        }
+
+        function visDyr() {
+            const container = document.querySelector("#udskriv");
+            const arterTemplate = document.querySelector("template");
+            dyr.forEach(dyr => {
+                let klon = arterTemplate.cloneNode(true).content;
+                klon.querySelector("h3").textContent = dyr.art;
+                klon.querySelector("p").textContent = dyr.type;
+                klon.querySelector("p + p").textContent = dyr.levested;
+                klon.querySelector("img").src = dyr.billede;
+                container.appendChild(klon);
+
+            });
+
+
+        }
+    </script>
+</body></html>
