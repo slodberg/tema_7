@@ -27,7 +27,13 @@
 
 <body>
 
+    <header>
+        <button class="filter valgt" data-køn="alle">Alle</button>
+        <button class="filter" data-køn="m">Mænd</button>
+        <button class="filter" data-køn="k">Kvinder</button>
+        <button class="filter" data-køn="andet">Andet</button>
 
+    </header>
     <section id="udskriv"></section>
 
     <template>
@@ -41,13 +47,14 @@
 
     <script>
         let personer;
-        let filter = "k";
+        let filter = "alle";
         const endpoint = "https://spreadsheets.google.com/feeds/list/1XWWbfWszD7f4jHqp51V_oT3pkHuR-ceEUw4YtrvK7F0/od6/public/values?alt=json";
 
         document.addEventListener("DOMContentLoaded", start);
 
         function start() {
             hentJson();
+            addEventListenersToButtons();
         }
 
         async function hentJson() {
@@ -60,10 +67,12 @@
             const container = document.querySelector("#udskriv");
             const arterTemplate = document.querySelector("template");
             console.log("Personer", personer);
+            container.innerHTML = "";
+
 
             personer.feed.entry.forEach((person) => {
 
-                if (person.gsx$sex.$t == filter) {
+                if (filter == "alle" || filter == person.gsx$sex.$t) {
                     let klon = arterTemplate.cloneNode(true).content;
                     klon.querySelector("h2").textContent = person.gsx$navn.$t;
                     klon.querySelector("img").src = person.gsx$billede.$t;
@@ -74,8 +83,18 @@
                 }
 
             });
+        }
 
+        function addEventListenersToButtons() {
+            document.querySelectorAll(".filter").forEach(elm => {
+                elm.addEventListener("click", filtrering);
+            })
+        }
 
+        function filtrering() {
+            console.log("Der filtreres");
+            filter = this.dataset.køn;
+            visPersoner();
         }
     </script>
 </body></html>
