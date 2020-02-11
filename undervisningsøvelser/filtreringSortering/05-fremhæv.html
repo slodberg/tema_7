@@ -16,11 +16,27 @@
 
         .item {
             border: solid black;
+            padding: 50px;
         }
 
         img {
             max-width: 200px;
         }
+
+        .valgt {
+            background: red;
+        }
+
+        .menu {
+            text-align: center;
+            padding-bottom: 50px;
+        }
+
+        h1 {
+            text-align: center;
+
+        }
+
     </style>
 
 </head>
@@ -28,11 +44,13 @@
 <body>
 
     <header>
-
-        <button class="filter valgt" data-køn="alle">Alle</button>
-        <button class="filter" data-køn="m">Mænd</button>
-        <button class="filter" data-køn="k">Kvinder</button>
-        <button class="filter" data-køn="andet">Andet</button>
+        <h1>Alle</h1>
+        <nav class="menu">
+            <button class="filter valgt" data-køn="alle">Alle</button>
+            <button class="filter" data-køn="m">Mænd</button>
+            <button class="filter" data-køn="k">Kvinder</button>
+            <button class="filter" data-køn="andet">Andet</button>
+        </nav>
     </header>
     <section id="udskriv"></section>
 
@@ -94,8 +112,15 @@
         function filtrering() {
             console.log("Der filtreres");
             filter = this.dataset.køn;
-
+            document.querySelector("h1").textContent = this.textContent;
+            document.querySelectorAll(".filter").forEach(elm => {
+                elm.classList.remove("valgt");
+            })
+            this.classList.add("valgt");
             visPersoner();
         }
+
     </script>
-</body></html>
+</body>
+
+</html>

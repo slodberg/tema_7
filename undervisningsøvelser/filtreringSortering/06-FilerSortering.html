@@ -16,10 +16,25 @@
 
         .item {
             border: solid black;
+            padding: 50px;
         }
 
         img {
             max-width: 200px;
+        }
+
+        .valgt {
+            background: red;
+        }
+
+        .menu {
+            text-align: center;
+            padding-bottom: 50px;
+        }
+
+        h1 {
+            text-align: center;
+
         }
     </style>
 
@@ -28,11 +43,14 @@
 <body>
 
     <header>
-
-        <button class="filter valgt" data-køn="alle">Alle</button>
-        <button class="filter" data-køn="m">Mænd</button>
-        <button class="filter" data-køn="k">Kvinder</button>
-        <button class="filter" data-køn="andet">Andet</button>
+        <h1>Alle</h1>
+        <nav class="menu">
+            <button class="filter valgt" data-køn="alle">Alle</button>
+            <button class="filter" data-køn="m">Mænd</button>
+            <button class="filter" data-køn="k">Kvinder</button>
+            <button class="filter" data-køn="andet">Andet</button>
+            <button class="aldersFilterBNT" data-alder-under="55">Alle under 55</button>
+        </nav>
     </header>
     <section id="udskriv"></section>
 
@@ -48,20 +66,27 @@
     <script>
         let personer;
         let filter = "alle";
+        let filterAlder = 0;
         const endpoint = "https://spreadsheets.google.com/feeds/list/1XWWbfWszD7f4jHqp51V_oT3pkHuR-ceEUw4YtrvK7F0/od6/public/values?alt=json";
 
         document.addEventListener("DOMContentLoaded", start);
+
+
 
         function start() {
             hentJson();
             addEventListenersToButtons();
         }
 
+
+
         async function hentJson() {
             let jsonData = await fetch(endpoint);
             personer = await jsonData.json();
             visPersoner();
         }
+
+
 
         function visPersoner() {
             const container = document.querySelector("#udskriv");
@@ -72,12 +97,14 @@
 
             personer.feed.entry.forEach((person) => {
 
-                if (filter == "alle" || filter == person.gsx$sex.$t) {
+                if ((filter == "alle" || filter == person.gsx$sex.$t) && (person.gsx$alder.$t < filterAlder)) {
                     let klon = arterTemplate.cloneNode(true).content;
                     klon.querySelector("h2").textContent = person.gsx$navn.$t;
-                    klon.querySelector("img").src = person.gsx$billede.$t;
+                    klon.querySelector("img").src = person.gsx$billede.$t + ;
                     klon.querySelector("p").textContent = person.gsx$sex.$t;
                     klon.querySelector("p + p").textContent = person.gsx$alder.$t;
+
+                    addEventListenersToButtons()
 
                     container.appendChild(klon);
                 }
@@ -94,8 +121,24 @@
         function filtrering() {
             console.log("Der filtreres");
             filter = this.dataset.køn;
+            document.querySelector("h1").textContent = this.textContent;
+            document.querySelectorAll(".filter").forEach(elm => {
+                elm.classList.remove("valgt");
+            })
+            this.classList.add("valgt");
+            aldersfiltrering()
+        }
 
-            visPersoner();
+        function aldersfiltrering() {
+            if (filterAlder == 0) {
+                filterAlder == 55;
+                this.classList.add("valgt");
+
+            } else {
+                filterAlder = 0;
+
+                this.classList.remove("valgt");
+            }
         }
     </script>
 </body></html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="da">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <style>
+        section {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-gap: 5px;
+            max-width: 960px;
+            margin: 0 auto;
+        }
+
+        .item {
+            border: solid black;
+            padding: 50px;
+        }
+
+        img {
+            max-width: 200px;
+        }
+
+        .menu {
+            text-align: center;
+            padding-bottom: 50px;
+        }
+
+        h1 {
+            text-align: center;
+
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <header>
+        <h1>Alle</h1>
+        <nav class="menu">
+            <button class="filter valgt" data-kategori="alle">Alle</button>
+            <button class="filter" data-kategori="forretter">Forretter</button>
+            <button class="filter" data-kategori="hovedretter">Hovedretter</button>
+            <button class="filter" data-kategori="desserter">Desserter</button>
+            <button class="filter" data-kategori="drikkevarer">Drikkevare</button>
+        </nav>
+    </header>
+
+    <section id="udskriv"></section>
+
+    <template>
+        <div class="item">
+            <h2></h2>
+            <img scr="" alt="">
+            <p></p>
+            <p></p>
+        </div>
+    </template>
+
+    <script>
+        let retter;
+        let filter = "alle";
+
+        const endpoint = "https://spreadsheets.google.com/feeds/list/17Dd7DvkPaFamNUdUKlrFgnH6POvBJXac7qyiS6zNRw0/od6/public/values?alt=json";
+
+        document.addEventListener("DOMContentLoaded", start);
+
+        function start() {
+            hentJson();
+            addEventListenersToButtons()
+        }
+
+        async function hentJson() {
+            let jsonData = await fetch(endpoint);
+            retter = await jsonData.json();
+            visRetter();
+        }
+
+        function visRetter() {
+            const container = document.querySelector("#udskriv");
+            const arterTemplate = document.querySelector("template");
+            console.log("Retter", retter);
+            container.innerHTML = "";
+
+
+            retter.feed.entry.forEach((ret) => {
+
+                if (filter == "alle" || filter == ret.gsx$kategori.$t) {
+                    let klon = arterTemplate.cloneNode(true).content;
+                    klon.querySelector("img").src = "imgs/small/" + ret.gsx$billede.$t + "-sm.jpg";
+                    klon.querySelector("h2").textContent = ret.gsx$navn.$t;
+                    klon.querySelector("p").textContent = ret.gsx$pris.$t;
+                    klon.querySelector("p + p").textContent = ret.gsx$kort.$t;
+
+                    container.appendChild(klon);
+                }
+
+            });
+        }
+
+        function addEventListenersToButtons() {
+            document.querySelectorAll(".filter").forEach(elm => {
+                elm.addEventListener("click", filtrering);
+            })
+        }
+
+        function filtrering() {
+            console.log("Der filtreres");
+
+            filter = this.dataset.kategori;
+            document.querySelector("h1").textContent = this.textContent;
+            document.querySelectorAll(".filter").forEach(elm => {
+                elm.classList.remove("valgt");
+            })
+            this.classList.add("valgt");
+            visRetter();
+        }
+    </script>
+</body></html>
