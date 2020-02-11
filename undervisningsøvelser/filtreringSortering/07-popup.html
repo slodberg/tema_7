@@ -38,19 +38,27 @@
         }
 
         #detalje {
-            position: absolute;
+            position: fixed;
             top: 0;
+            left: 0;
             width: 100vw;
-            height: 50vh;
-            background-color: rgb(0, 0, 0, .5);
+            height: 100vh;
+            background-color: rgb(282%, 22%, 31%, .53);
         }
 
-        #detaljer buttom {}
+        #detaljer .luk {
+            position: fixed;
+            top: 0;
+            right: 0;
+            font-size: 4rem;
+        }
 
         #person-detalje {
+            width: 60vw;
+            min-height: 50vh;
             margin: 3rem;
             padding: 2em;
-            background-color: aliceblue;
+            background-color: white;
         }
     </style>
 
@@ -69,6 +77,15 @@
     </header>
     <section id="udskriv"></section>
 
+    <section id="detalje" class="skjul">
+        <article id="person-detalje">
+            <button class="luk">X</button>
+            <h2>Navn</h2>
+            <img scr="">
+            <p>Relegion</p>
+        </article>
+    </section>
+
     <template>
         <div class="item">
             <h2></h2>
@@ -78,14 +95,7 @@
         </div>
     </template>
 
-    <section id="detalje" class="skjul">
-        <button></button>
-        <article id="person-detalje">
-            <h1>Navn</h1>
-            <img scr="">
-            <p>Relegion</p>
-        </article>
-    </section>
+
 
     <script>
         let personer;
@@ -106,15 +116,16 @@
         }
 
         function visPersoner() {
+            console.log("Personer", personer);
             const container = document.querySelector("#udskriv");
             const arterTemplate = document.querySelector("template");
-            console.log("Personer", personer);
-            container.innerHTML = "";
 
+            container.innerHTML = "";
 
             personer.feed.entry.forEach((person) => {
 
                 if (filter == "alle" || filter == person.gsx$sex.$t) {
+
                     let klon = arterTemplate.cloneNode(true).content;
                     klon.querySelector("h2").textContent = person.gsx$navn.$t;
                     klon.querySelector("img").src = person.gsx$billede.$t;
@@ -142,6 +153,10 @@
             })
             this.classList.add("valgt");
             visPersoner();
+        }
+
+        function visDetalje(person) {
+            detalje.classList.remove()
         }
     </script>
 </body></html>
