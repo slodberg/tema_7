@@ -5,13 +5,34 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title></title>
+    <link href="https://fonts.googleapis.com/css?family=Bowlby+One+SC&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Sura&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css?family=Saira+Condensed&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css?family=Alegreya+Sans+SC&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css?family=Public+Sans&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css?family=Oswald&display=swap" rel="stylesheet">
     <style>
-        #splash {
-            margin: 0 auto;
-            max-width: 950px;
+        body {
+            margin: 0;
+            background-color: #7C0012;
         }
 
-        .billde {}
+        /**************splash billede************/
+        #splash {
+            text-align: center;
+            margin: 0 auto;
+            background-color: floralwhite;
+        }
+
+        .billede img {
+            width: 80%;
+        }
+
+        /**********grid der udskrives via js******************/
 
         #udskriv {
             display: grid;
@@ -19,10 +40,13 @@
             grid-gap: 5px;
             max-width: 960px;
             margin: 0 auto;
+            background-color: #7C0012;
         }
 
+        /***********element i grid opsætning************/
         .item {
-            background-color: #dddddd;
+            cursor: pointer;
+            background-color: floralwhite;
             padding: 40px;
         }
 
@@ -30,23 +54,52 @@
             max-width: 235px;
         }
 
+        /********** nav - menu ***************/
         .menu {
             text-align: center;
-            padding-bottom: 50px;
+            padding-bottom: 20px;
+            padding-top: 50px;
+
         }
 
+        /************** knapper i menuen**************/
         .filter {
+            background-color: floralwhite;
+            border: none;
             cursor: pointer;
-            width: 180px;
-            height: 30px;
+            width: 189px;
+            height: 40px;
+            font-family: 'Alegreya Sans SC', sans-serif;
+            font-size: 1.3rem;
         }
 
+        /************Fonte*************/
         h1 {
             text-align: center;
-
+            /*font-family: 'Saira Condensed', sans-serif;*/
+            /*font-family: 'Bowlby One SC', cursive;*/
+            /*font-family: 'Sura', serif;*/
+            /*font-family: 'Public Sans', sans-serif;*/
+            font-family: 'Alegreya Sans SC', sans-serif;
+            color: floralwhite;
+            letter-spacing: 3px;
+            font-size: 2.8rem;
         }
 
+        h2 {
+            font-family: 'Alegreya Sans SC', sans-serif;
+            letter-spacing: 2px;
+            font-size: 1.5rem;
+        }
+
+        p {
+            font-family: 'Oswald', sans-serif;
+            letter-spacing: .5px;
+        }
+
+        /*********produckt detaljer (popup baggrund)*****/
         #detalje {
+            text-align: center;
             margin: 0 auto;
             position: fixed;
             top: 0;
@@ -54,42 +107,57 @@
             width: 100vw;
             height: 100vh;
             background-color: rgb(0, 0, 0, .53);
+
         }
 
-        #detalje .luk {
-            cursor: pointer;
-            position: fixed;
-            top: 3.1rem;
-            left: 5.3rem;
-            font-size: 2rem;
-            background-color: #969696;
-            border: none;
-        }
-
+        /******** popup vindue**********/
         #bistro-detalje {
-            width: 85vw;
+            width: 50vw;
             min-height: 50vh;
-            margin: 3rem auto;
-            padding: 2em;
-            background-color: #fffdf5;
+            margin: 1rem auto;
+            padding: 2rem;
+            background-color: floralwhite;
         }
 
         #bistro-detalje img {
-            width: 50%;
+            width: 80%;
+        }
 
+        #detalje p {
+            text-align: start;
+            padding-left: 5rem;
+        }
+
+        /*lukknappen i produktdetaljer*/
+        #detalje .luk {
+            cursor: pointer;
+            position: fixed;
+            top: 2rem;
+            left: 23.3rem;
+            font-size: 1.5rem;
+            background-color: floralwhite;
+            border: none;
+            font-weight: 500;
+            font-family: 'Open Sans', sans-serif;
         }
 
         .skjul {
             display: none;
         }
+
     </style>
 
 </head>
 
 <body>
+    <section id="splash">
+        <div class="billede">
+            <img src="imgs/bistro-b-billede.png" alt="øverste billede">
+        </div>
+    </section>
 
     <header>
-        <h1>Alle</h1>
+
         <nav class="menu">
             <button class="filter valgt" data-kategori="alle">Alle</button>
             <button class="filter" data-kategori="forretter">Forretter</button>
@@ -98,12 +166,8 @@
             <button class="filter" data-kategori="drikkevarer">Drikkevare</button>
         </nav>
     </header>
-    <section id="splash">
-        <div class="billede">
-            <img src="imgs/splash-bistro-b.png">
-        </div>
-    </section>
 
+    <h1>Alle</h1>
     <section id="udskriv"></section>
 
     <template>
@@ -157,7 +221,7 @@
                     let klon = itemTemplate.cloneNode(true).content;
                     klon.querySelector("img").src = "imgs/small/" + ret.gsx$billede.$t + "-sm.jpg";
                     klon.querySelector("h2").textContent = ret.gsx$navn.$t;
-                    klon.querySelector("p").textContent = ret.gsx$pris.$t + ",-";
+                    klon.querySelector("p").textContent = "Pris" + " " + ret.gsx$pris.$t + ",-";
                     klon.querySelector("p + p").textContent = ret.gsx$kort.$t;
 
                     klon.querySelector(".item").addEventListener("click", () => visDetalje(ret));
@@ -176,7 +240,7 @@
 
             document.querySelector("#detalje h2").textContent = ret.gsx$navn.$t;
             document.querySelector("#detalje img").src = "imgs/large/" + ret.gsx$billede.$t + ".jpg";
-            document.querySelector("#detalje p").textContent = ret.gsx$pris.$t + ",-";
+            document.querySelector("#detalje p").textContent = "Pris" + " " + ret.gsx$pris.$t + ",-";
             document.querySelector("#detalje .beskriv").textContent = ret.gsx$lang.$t;
 
         }
@@ -203,5 +267,8 @@
             this.classList.add("valgt");
             visRetter();
         }
+
     </script>
-</body></html>
+</body>
+
+</html>
