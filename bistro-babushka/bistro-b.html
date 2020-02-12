@@ -6,7 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title></title>
     <style>
-        section {
+        #splash {
+            margin: 0 auto;
+            max-width: 950px;
+        }
+
+        .billde {}
+
+        #udskriv {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             grid-gap: 5px;
@@ -15,12 +22,12 @@
         }
 
         .item {
-            border: solid black;
-            padding: 50px;
+            background-color: #dddddd;
+            padding: 40px;
         }
 
-        img {
-            max-width: 200px;
+        .item img {
+            max-width: 235px;
         }
 
         .menu {
@@ -28,9 +35,52 @@
             padding-bottom: 50px;
         }
 
+        .filter {
+            cursor: pointer;
+            width: 180px;
+            height: 30px;
+        }
+
         h1 {
             text-align: center;
 
+        }
+
+        #detalje {
+            margin: 0 auto;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgb(0, 0, 0, .53);
+        }
+
+        #detalje .luk {
+            cursor: pointer;
+            position: fixed;
+            top: 3.1rem;
+            left: 5.3rem;
+            font-size: 2rem;
+            background-color: #969696;
+            border: none;
+        }
+
+        #bistro-detalje {
+            width: 85vw;
+            min-height: 50vh;
+            margin: 3rem auto;
+            padding: 2em;
+            background-color: #fffdf5;
+        }
+
+        #bistro-detalje img {
+            width: 50%;
+
+        }
+
+        .skjul {
+            display: none;
         }
     </style>
 
@@ -48,6 +98,11 @@
             <button class="filter" data-kategori="drikkevarer">Drikkevare</button>
         </nav>
     </header>
+    <section id="splash">
+        <div class="billede">
+            <img src="imgs/splash-bistro-b.png">
+        </div>
+    </section>
 
     <section id="udskriv"></section>
 
@@ -59,6 +114,16 @@
             <p></p>
         </div>
     </template>
+
+    <section id="detalje" class="skjul">
+        <article id="bistro-detalje">
+            <button class="luk">X</button>
+            <h2>Navn</h2>
+            <img scr="">
+            <p>Relegion</p>
+            <p class="beskriv"></p>
+        </article>
+    </section>
 
     <script>
         let retter;
@@ -81,7 +146,7 @@
 
         function visRetter() {
             const container = document.querySelector("#udskriv");
-            const arterTemplate = document.querySelector("template");
+            const itemTemplate = document.querySelector("template");
             console.log("Retter", retter);
             container.innerHTML = "";
 
@@ -89,16 +154,36 @@
             retter.feed.entry.forEach((ret) => {
 
                 if (filter == "alle" || filter == ret.gsx$kategori.$t) {
-                    let klon = arterTemplate.cloneNode(true).content;
+                    let klon = itemTemplate.cloneNode(true).content;
                     klon.querySelector("img").src = "imgs/small/" + ret.gsx$billede.$t + "-sm.jpg";
                     klon.querySelector("h2").textContent = ret.gsx$navn.$t;
-                    klon.querySelector("p").textContent = ret.gsx$pris.$t;
+                    klon.querySelector("p").textContent = ret.gsx$pris.$t + ",-";
                     klon.querySelector("p + p").textContent = ret.gsx$kort.$t;
 
+                    klon.querySelector(".item").addEventListener("click", () => visDetalje(ret));
                     container.appendChild(klon);
                 }
 
             });
+        }
+
+        function visDetalje(ret) {
+            console.log(ret);
+
+            document.querySelector("#detalje").classList.remove("skjul");
+
+            document.querySelector("#detalje .luk").addEventListener("click", skjulDetalje);
+
+            document.querySelector("#detalje h2").textContent = ret.gsx$navn.$t;
+            document.querySelector("#detalje img").src = "imgs/large/" + ret.gsx$billede.$t + ".jpg";
+            document.querySelector("#detalje p").textContent = ret.gsx$pris.$t + ",-";
+            document.querySelector("#detalje .beskriv").textContent = ret.gsx$lang.$t;
+
+        }
+
+        function skjulDetalje() {
+            document.querySelector("#detalje").classList.add("skjul");
+
         }
 
         function addEventListenersToButtons() {
