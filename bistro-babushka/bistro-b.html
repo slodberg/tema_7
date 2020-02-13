@@ -141,6 +141,22 @@
             font-family: 'Open Sans', sans-serif;
         }
 
+        #popup {
+            width: 20%;
+            background-color: #7C0012;
+            border-color: transparent;
+            color: floralwhite;
+            font-family: 'Alegreya Sans SC', sans-serif;
+        }
+
+        #visretter {
+            width: 20%;
+            background-color: #7C0012;
+            border-color: transparent;
+            color: floralwhite;
+            font-family: 'Alegreya Sans SC', sans-serif;
+        }
+
         .skjul {
             display: none;
         }
@@ -176,6 +192,10 @@
             <img scr="" alt="">
             <p></p>
             <p></p>
+
+            <button id="popup">Popup</button>
+            <button id="visretter">Nyt</button>
+
         </div>
     </template>
 
@@ -190,12 +210,14 @@
     </section>
 
     <script>
-        let retter;
-        let filter = "alle";
+        document.addEventListener("DOMContentLoaded", start);
 
         const endpoint = "https://spreadsheets.google.com/feeds/list/17Dd7DvkPaFamNUdUKlrFgnH6POvBJXac7qyiS6zNRw0/od6/public/values?alt=json";
 
-        document.addEventListener("DOMContentLoaded", start);
+        let retter = [];
+        let filter = "alle";
+        const container = document.querySelector("#udskriv");
+        const itemTemplate = document.querySelector("template");
 
         function start() {
             hentJson();
@@ -203,72 +225,109 @@
         }
 
         async function hentJson() {
+            console.log("hentData");
             let jsonData = await fetch(endpoint);
             retter = await jsonData.json();
             visRetter();
         }
 
+
         function visRetter() {
-            const container = document.querySelector("#udskriv");
-            const itemTemplate = document.querySelector("template");
+
             console.log("Retter", retter);
             container.innerHTML = "";
 
 
             retter.feed.entry.forEach((ret) => {
 
-                if (filter == "alle" || filter == ret.gsx$kategori.$t) {
-                    let klon = itemTemplate.cloneNode(true).content;
-                    klon.querySelector("img").src = "imgs/small/" + ret.gsx$billede.$t + "-sm.jpg";
-                    klon.querySelector("h2").textContent = ret.gsx$navn.$t;
-                    klon.querySelector("p").textContent = "Pris" + " " + ret.gsx$pris.$t + ",-";
-                    klon.querySelector("p + p").textContent = ret.gsx$kort.$t;
+                        if (filter == "alle" || filter == ret.gsx$kategori.$t) {
+                            let klon = itemTemplate.cloneNode(true).content;
 
-                    klon.querySelector(".item").addEventListener("click", () => visDetalje(ret));
-                    container.appendChild(klon);
-                }
+                            klon.querySelector("img").src = "imgs/small/" + ret.gsx$billede.$t + "-sm.jpg";
+                            klon.querySelector("h2").textContent = ret.gsx$navn.$t;
+                            klon.querySelector("p").textContent = ret.gsx$kort.$t;
+                            klon.querySelector("p + p").textContent = "Pris" + " " + ret.gsx$pris.$t + ",-";
 
-            });
-        }
+                            klon.querySelector(".item").addEventListener("click", () => visDetalje(ret));
 
-        function visDetalje(ret) {
-            console.log(ret);
+                            klon.querySelector("#visretter").addEventListener("click", () => {
+                                location.href = "detalje-bistro.html?id=" + ret.gsx$id.$t
+                            }); < !DOCTYPE html >
+                                <
+                                html lang = "" >
+                                <
+                                head >
+                                <
+                                meta charset = "utf-8" >
+                                <
+                                meta name = "viewport"
+                            content = "width=device-width, initial-scale=1.0" >
+                                <
+                                title > < /title> <
+                                link rel = "stylesheet"
+                            href = "" >
+                                <
+                                /head>
 
-            document.querySelector("#detalje").classList.remove("skjul");
-
-            document.querySelector("#detalje .luk").addEventListener("click", skjulDetalje);
-
-            document.querySelector("#detalje h2").textContent = ret.gsx$navn.$t;
-            document.querySelector("#detalje img").src = "imgs/large/" + ret.gsx$billede.$t + ".jpg";
-            document.querySelector("#detalje p").textContent = "Pris" + " " + ret.gsx$pris.$t + ",-";
-            document.querySelector("#detalje .beskriv").textContent = ret.gsx$lang.$t;
-
-        }
-
-        function skjulDetalje() {
-            document.querySelector("#detalje").classList.add("skjul");
-
-        }
-
-        function addEventListenersToButtons() {
-            document.querySelectorAll(".filter").forEach(elm => {
-                elm.addEventListener("click", filtrering);
-            })
-        }
-
-        function filtrering() {
-            console.log("Der filtreres");
-
-            filter = this.dataset.kategori;
-            document.querySelector("h1").textContent = this.textContent;
-            document.querySelectorAll(".filter").forEach(elm => {
-                elm.classList.remove("valgt");
-            })
-            this.classList.add("valgt");
-            visRetter();
-        }
+                                <
+                                body >
+                                <
+                                script src = "" >
 
     </script>
+</body>
+
+</html>
+
+
+container.appendChild(klon);
+}
+
+});
+}
+
+
+function visDetalje(ret) {
+console.log(ret);
+
+document.querySelector("#detalje").classList.remove("skjul");
+
+document.querySelector("#detalje .luk").addEventListener("click", skjulDetalje);
+
+document.querySelector("#detalje h2").textContent = ret.gsx$navn.$t;
+document.querySelector("#detalje img").src = "imgs/large/" + ret.gsx$billede.$t + ".jpg";
+
+document.querySelector("#detalje .beskriv").textContent = ret.gsx$lang.$t;
+
+document.querySelector("#detalje p").textContent = "Pris" + " " + ret.gsx$pris.$t + ",-";
+
+}
+
+function skjulDetalje() {
+document.querySelector("#detalje").classList.add("skjul");
+
+}
+
+function addEventListenersToButtons() {
+document.querySelectorAll(".filter").forEach(elm => {
+elm.addEventListener("click", filtrering);
+})
+}
+
+function filtrering() {
+console.log("Der filtreres");
+
+filter = this.dataset.kategori;
+
+document.querySelector("h1").textContent = this.textContent;
+document.querySelectorAll(".filter").forEach(elm => {
+elm.classList.remove("valgt");
+})
+this.classList.add("valgt");
+visRetter();
+}
+
+</script>
 </body>
 
 </html>
