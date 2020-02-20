@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="da">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <link rel="stylesheet" href="">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        img {
+            max-width: 100%;
+        }
+        
+        .ret {
+            border: 1px solid #000;
+            padding: 10px;
+        }
+
+        nav {
+            text-align: center;
+        }
+
+        #detalje {
+            top: 0;
+            left: 0;
+            overflow: scroll;
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            z-index: 10;
+            background-color: aqua;
+        }
+
+        #tilbage {
+            top: 0;
+            left: 0;
+            cursor: pointer;
+            background-color: white;
+            border-bottom-color: white;
+            border-bottom-style: none;
+            padding: 0;
+            margin: 0;
+            border-width: 0;
+            font: 0;
+            border-top-color: white;
+            border-right-color: white;
+            border-bottom-color: white;
+            border-left-color: white;
+
+        }
+
+        span {
+            font-size: 4rem;
+        }
+
+
+        /*
+        #detalje button {
+        font-size: 2rem;
+        position: fixed;
+        top: 0;
+        left: 0;
+        cursor: pointer;
+        }
+*/
+
+
+
+        @media screen and (min-width:768px) {}
+
+    </style>
+</head>
+
+<body>
+
+
+    <section id="detalje">
+        <button id="tilbage">
+            <span>&#8617;</span>
+        </button>
+        
+        <article id="ret">
+            <h1></h1>
+            <img src="" alt="">
+            <p></p>
+            <p></p>
+
+        </article>
+    </section>
+
+
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const id = urlParams.get("id");
+        console.log(id);
+        let retter = [];
+        const endpoint = "https://spreadsheets.google.com/feeds/list/17Dd7DvkPaFamNUdUKlrFgnH6POvBJXac7qyiS6zNRw0/od6/public/values?alt=json";
+        document.addEventListener("DOMContentLoaded", start);
+
+        const detalje = document.querySelector("#detalje");
+
+
+        //start
+        function start() {
+            hentData();
+
+
+        }
+
+        async function hentData() {
+            const jsonData = await fetch(endpoint);
+            retter = await jsonData.json();
+            console.log(hentData);
+            visRetter();
+        }
+
+        function visRetter() {
+            detalje.querySelector("button").addEventListener("click", () => {
+                history.back();
+            });
+
+            retter.feed.entry.forEach(ret => {
+                if (ret.gsx$id.$t == id) {
+                    detalje.querySelector("h1").textContent = ret.gsx$navn.$t;
+
+                    detalje.querySelector("p").textContent = ret.gsx$lang.$t;
+                    detalje.querySelector("p + p").textContent = "Oprindelse:" +
+                        ret.gsx$oprindelse.$t;
+                    detalje.querySelector("img").src = "imgs/small/" + ret.gsx$billede.$t + "-sm.jpg";
+
+                    console.log(retter.gsx$navn.$t);
+
+                }
+            });
+        }
+
+    </script>
+</body>
+
+</html>

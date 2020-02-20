@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <link rel="stylesheet" href="">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        img {
+            max-width: 100%;
+            background-size: cover;
+
+        }
+
+        #udskriv {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 10px;
+
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            grid-gap: 5px;
+        }
+
+        article {
+            border: 2px solid black;
+            padding: 10px;
+        }
+
+        nav,
+        h1 {
+            text-align: center;
+        }
+
+
+
+        #detalje {
+            top: 0;
+            position: fixed;
+            width: 98vw;
+            height: 50vh;
+            z-index: 10;
+            background-color: white;
+        }
+
+
+        #person {
+            text-align: center;
+            background-color: white;
+        }
+
+        #detalje img {
+            text-align: center;
+        }
+
+        button {
+            cursor: pointer;
+            transition: .4s;
+            transition-timing-function: cubic-bezier(.2, 0, .3, 1);
+            transform: scale(1);
+            color: white;
+            border-radius: 10px;
+            height: 3vw;
+            width: 10vw;
+            background-color: black;
+            /*            background-color: #0136A7;*/
+
+        }
+
+        #detalje button {
+            font-size: 2rem;
+        }
+
+        .skjul {
+            display: none;
+        }
+
+
+        #popup {
+            max-width: 20%;
+            background-color: white;
+            background-color: white;
+            border-color: transparent;
+
+
+        }
+
+        #luk {
+
+            background-color: white;
+            border-bottom-color: white;
+            border-bottom-style: none;
+        }
+
+        #splash {
+            text-align: center;
+        }
+
+        .billede img {
+            width: 70%;
+
+        }
+
+
+
+        @media screen and (min-width:768px) {}
+
+    </style>
+</head>
+
+<body>
+
+    <section id="splash">
+        <div class="billede"><img src="icons/splash.png" alt="Splash billede til bistro babushka"></div>
+    </section>
+
+    <nav>
+
+        <button class="filter valgt" data-kategori="alle">Alle retter</button>
+        <button class="filter" data-kategori="forretter">Forret </button>
+        <button class="filter" data-kategori="hovedretter">hovedretter</button>
+        <button class="filter" data-kategori="desserter">desserter </button>
+        <button class="filter" data-kategori="sideorders">Sideorders</button>
+        <button class="filter" data-kategori="drikkevarer">Drikkevarer</button>
+        <h1>Alle retter</h1>
+    </nav>
+
+
+    <section id="udskriv">
+        <!--
+        <h2></h2>
+        <p></p>
+        <p></p>
+        <img scr="" alt="">
+-->
+
+
+        <template>
+            <article class="retter">
+
+                <h2></h2>
+                <img scr="" alt="">
+                <p></p>
+                <p></p>
+
+                <button id="popup"><img src="icons/popup.png"></button>
+
+                <button id="visretter">Vis mere</button>
+            </article>
+        </template>
+
+
+
+    </section>
+
+
+
+    <section id="detalje" class="skjul">
+        <button id="luk">X</button>
+        <article id="person">
+            <h1></h1>
+            <img src="" alt="">
+            <p></p>
+            <p></p>
+            <p></p>
+
+        </article>
+    </section>
+
+    <script>
+        const endpoint = "https://spreadsheets.google.com/feeds/list/17Dd7DvkPaFamNUdUKlrFgnH6POvBJXac7qyiS6zNRw0/od6/public/values?alt=json";
+        document.addEventListener("DOMContentLoaded", start);
+        let retter = [];
+        let filter = "alle";
+        const container = document.querySelector("#udskriv");
+        const retterTemplate = document.querySelector("template");
+
+        //start
+        function start() {
+            hentData();
+            addEventlistnerToButtons()
+        }
+
+        async function hentData() {
+            const jsonData = await fetch(endpoint);
+            retter = await jsonData.json();
+            console.log("hentData");
+
+            visRetter();
+        }
+
+        function visRetter() {
+
+            container.innerHTML = "";
+
+            retter.feed.entry.forEach(ret => {
+                if (filter == "alle" || filter == ret.gsx$kategori.$t) {
+                    let klon = retterTemplate.cloneNode(true).content;
+                    klon.querySelector("img").src = "imgs/small/" + ret.gsx$billede.$t + "-sm.jpg";
+                    klon.querySelector("h2").textContent = ret.gsx$navn.$t;
+                    klon.querySelector("p").textContent = ret.gsx$kort.$t;
+                    klon.querySelector("p + p").textContent = `Pris: ${ret.gsx$pris.$t},-`;
+                    klon.querySelector("#popup").addEventListener("click", () => visDetalje(ret));
+
+                    klon.querySelector("#visretter").addEventListener("click", () => {
+                        location.href = "detalje.html?id=" + ret.gsx$id.$t
+                    });
+
+                    container.appendChild(klon);
+                }
+            });
+
+            console.log("visretter");
+        }
+
+        function addEventlistnerToButtons() {
+            document.querySelectorAll(".filter").forEach(elm => {
+                elm.addEventListener("click", filterering);
+            })
+        }
+
+
+        function filterering() {
+            console.log("filter");
+            filter = this.dataset.kategori;
+
+
+            document.querySelector("h1").textContent = this.textContent;
+
+            document.querySelectorAll(".filter").forEach(elm => {
+                elm.classList.remove("valgt")
+            })
+            this.classList.add("valgt");
+
+            visRetter();
+        }
+
+
+        function visDetalje(ret) {
+            detalje.classList.remove("skjul");
+            detalje.querySelector("button").addEventListener("click", () => detalje.classList.add("skjul"));
+            detalje.querySelector("h1").textContent = ret.gsx$navn.$t;
+
+            detalje.querySelector("p").textContent = ret.gsx$lang.$t;
+            detalje.querySelector("p + p").textContent = "Oprindelse:" +
+                ret.gsx$oprindelse.$t;
+            detalje.querySelector("img").src = "imgs/small/" + ret.gsx$billede.$t + "-sm.jpg";
+            console.log(ret.gsx$navn.$t);
+        }
+
+    </script>
+</body>
+
+</html>

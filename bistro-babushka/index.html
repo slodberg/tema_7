@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="da">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <link href="https://fonts.googleapis.com/css?family=Bowlby+One+SC&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Sura&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css?family=Saira+Condensed&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css?family=Alegreya+Sans+SC&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css?family=Public+Sans&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css?family=Oswald&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            background-color: #7C0012;
+        }
+
+        /**************splash billede************/
+        #splash {
+            text-align: center;
+            margin: 0 auto;
+            background-color: floralwhite;
+        }
+
+        .billede img {
+            width: 80%;
+        }
+
+        /**********grid der udskrives via js******************/
+
+        #udskriv {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-gap: 5px;
+            max-width: 960px;
+            margin: 0 auto;
+            background-color: #7C0012;
+        }
+
+        /***********element i grid opsætning************/
+        .item {
+            cursor: pointer;
+            background-color: floralwhite;
+            padding: 40px;
+        }
+
+        .item img {
+            max-width: 235px;
+        }
+
+        /********** nav - menu ***************/
+        .menu {
+            text-align: center;
+            padding-bottom: 20px;
+            padding-top: 50px;
+
+        }
+
+        /************** knapper i menuen**************/
+        .filter {
+            background-color: floralwhite;
+            border: none;
+            cursor: pointer;
+            width: 189px;
+            height: 40px;
+            font-family: 'Alegreya Sans SC', sans-serif;
+            font-size: 1.3rem;
+        }
+
+        /************Fonte*************/
+        h1 {
+            text-align: center;
+            /*font-family: 'Saira Condensed', sans-serif;*/
+            /*font-family: 'Bowlby One SC', cursive;*/
+            /*font-family: 'Sura', serif;*/
+            /*font-family: 'Public Sans', sans-serif;*/
+            font-family: 'Alegreya Sans SC', sans-serif;
+            color: floralwhite;
+            letter-spacing: 3px;
+            font-size: 2.8rem;
+        }
+
+        h2 {
+            font-family: 'Alegreya Sans SC', sans-serif;
+            letter-spacing: 2px;
+            font-size: 1.5rem;
+        }
+
+        p {
+            font-family: 'Oswald', sans-serif;
+            letter-spacing: .5px;
+        }
+
+        /*********produckt detaljer (popup baggrund)*****/
+        #detalje {
+            text-align: center;
+            margin: 0 auto;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgb(0, 0, 0, .53);
+
+        }
+
+        /******** popup vindue**********/
+        #bistro-detalje {
+            width: 50vw;
+            min-height: 50vh;
+            margin: 1rem auto;
+            padding: 2rem;
+            background-color: floralwhite;
+        }
+
+        #bistro-detalje img {
+            width: 80%;
+        }
+
+        #detalje p {
+            text-align: start;
+            padding-left: 5rem;
+        }
+
+        /*lukknappen i produktdetaljer*/
+        #detalje .luk {
+            cursor: pointer;
+            position: fixed;
+            top: 2rem;
+            left: 23.3rem;
+            font-size: 1.5rem;
+            background-color: floralwhite;
+            border: none;
+            font-weight: 500;
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        #popup {
+            width: 20%;
+            background-color: #7C0012;
+            border-color: transparent;
+            color: floralwhite;
+            font-family: 'Alegreya Sans SC', sans-serif;
+        }
+
+        #visretter {
+            width: 20%;
+            background-color: #7C0012;
+            border-color: transparent;
+            color: floralwhite;
+            font-family: 'Alegreya Sans SC', sans-serif;
+        }
+
+        .skjul {
+            display: none;
+        }
+
+    </style>
+
+</head>
+
+<body>
+    <section id="splash">
+        <div class="billede">
+            <img src="imgs/bistro-b-billede.png" alt="øverste billede">
+        </div>
+    </section>
+
+    <header>
+
+        <nav class="menu">
+            <button class="filter valgt" data-kategori="alle">Alle</button>
+            <button class="filter" data-kategori="forretter">Forretter</button>
+            <button class="filter" data-kategori="hovedretter">Hovedretter</button>
+            <button class="filter" data-kategori="desserter">Desserter</button>
+            <button class="filter" data-kategori="drikkevarer">Drikkevare</button>
+        </nav>
+    </header>
+
+    <h1>Alle</h1>
+    <section id="udskriv"></section>
+
+    <template>
+        <div class="item">
+            <h2></h2>
+            <img scr="" alt="">
+            <p></p>
+            <p></p>
+
+            <button id="popup">Popup</button>
+            <button id="visretter">Nyt</button>
+
+        </div>
+    </template>
+
+    <section id="detalje" class="skjul">
+        <article id="bistro-detalje">
+            <button class="luk">X</button>
+            <h2>Navn</h2>
+            <img scr="">
+            <p>Relegion</p>
+            <p class="beskriv"></p>
+        </article>
+    </section>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", start);
+
+        const endpoint = "https://spreadsheets.google.com/feeds/list/17Dd7DvkPaFamNUdUKlrFgnH6POvBJXac7qyiS6zNRw0/od6/public/values?alt=json";
+
+        let retter = [];
+        let filter = "alle";
+        const container = document.querySelector("#udskriv");
+        const itemTemplate = document.querySelector("template");
+
+        function start() {
+            hentJson();
+            addEventListenersToButtons()
+        }
+
+        async function hentJson() {
+            console.log("hentData");
+            let jsonData = await fetch(endpoint);
+            retter = await jsonData.json();
+            visRetter();
+        }
+
+
+        function visRetter() {
+
+            console.log("Retter", retter);
+            container.innerHTML = "";
+
+
+            retter.feed.entry.forEach((ret) => {
+
+                if (filter == "alle" || filter == ret.gsx$kategori.$t) {
+                    let klon = itemTemplate.cloneNode(true).content;
+
+                    klon.querySelector("img").src = "imgs/small/" + ret.gsx$billede.$t + "-sm.jpg";
+                    klon.querySelector("h2").textContent = ret.gsx$navn.$t;
+                    klon.querySelector("p").textContent = ret.gsx$kort.$t;
+                    klon.querySelector("p + p").textContent = "Pris" + " " + ret.gsx$pris.$t + ",-";
+
+                    klon.querySelector(".item").addEventListener("click", () => visDetalje(ret));
+
+                    klon.querySelector("#visretter").addEventListener("click", () => {
+                        location.href = "detalje-bistro.html?id=" + ret.gsx$id.$t
+                    });
+
+
+                    container.appendChild(klon);
+                }
+
+            });
+        }
+
+
+        function visDetalje(ret) {
+            console.log(ret);
+
+            document.querySelector("#detalje").classList.remove("skjul");
+
+            document.querySelector("#detalje .luk").addEventListener("click", skjulDetalje);
+
+            document.querySelector("#detalje h2").textContent = ret.gsx$navn.$t;
+            document.querySelector("#detalje img").src = "imgs/large/" + ret.gsx$billede.$t + ".jpg";
+
+            document.querySelector("#detalje .beskriv").textContent = ret.gsx$lang.$t;
+
+            document.querySelector("#detalje p").textContent = "Pris" + " " + ret.gsx$pris.$t + ",-";
+
+        }
+
+        function skjulDetalje() {
+            document.querySelector("#detalje").classList.add("skjul");
+
+        }
+
+        function addEventListenersToButtons() {
+            document.querySelectorAll(".filter").forEach(elm => {
+                elm.addEventListener("click", filtrering);
+            })
+        }
+
+        function filtrering() {
+            console.log("Der filtreres");
+
+            filter = this.dataset.kategori;
+
+            document.querySelector("h1").textContent = this.textContent;
+            document.querySelectorAll(".filter").forEach(elm => {
+                elm.classList.remove("valgt");
+            })
+            this.classList.add("valgt");
+            visRetter();
+        }
+
+    </script>
+</body>
+
+</html>
